@@ -1,0 +1,244 @@
+.tree-visualizer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.visualizer-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.control-panel {
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.tree-controls {
+  display: flex;
+  gap: 2rem;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.operation-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.visualization-area {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 3rem 2rem;
+  margin-bottom: 2rem;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.tree-container {
+  display: flex;
+  justify-content: center;
+}
+
+.tree-node-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.tree-node {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.tree-node:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.tree-children {
+  display: flex;
+  gap: 4rem;
+  margin-top: 2rem;
+  position: relative;
+}
+
+.tree-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.connector {
+  width: 2px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+  position: relative;
+}
+
+.connector::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+}
+
+.tree-child.left .connector::before {
+  right: 0;
+  left: auto;
+  transform: translateX(0);
+  width: 40px;
+}
+
+.tree-child.right .connector::before {
+  left: 0;
+  transform: translateX(0);
+  width: 40px;
+}
+
+.result-panel {
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 15px;
+}
+
+.traversal-result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.traversal-step {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.info-panel {
+  padding: 1.5rem;
+  color: white;
+}
+
+.tree-info {
+  margin-bottom: 2rem;
+}
+
+.tree-info h3 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.property {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #4CAF50;
+}
+
+.property-name {
+  font-weight: 600;
+}
+
+.property-value {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.traversal-explanations h4 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.traversal-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.traversal-type {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.traversal-type h5 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #667eea;
+}
+
+.traversal-type p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media screen and (max-width: 768px) {
+  .tree-visualizer {
+    padding: 1rem;
+  }
+
+  .tree-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .operation-buttons {
+    justify-content: center;
+  }
+
+  .tree-children {
+    gap: 2rem;
+  }
+
+  .tree-node {
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+  }
+
+  .connector::before {
+    width: 40px;
+  }
+
+  .tree-child.left .connector::before,
+  .tree-child.right .connector::before {
+    width: 20px;
+  }
+}
