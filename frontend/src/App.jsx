@@ -2,13 +2,16 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home/Home';
 import SortingVisualizer from './pages/Sorting/SortingVisualizer';
 import SearchingVisualizer from './pages/Searching/SearchingVisualizer';
 import TreeVisualizer from './pages/Tree/TreeVisualizer';
 import StackQueueVisualizer from './pages/StackQueue/StackQueueVisualizer';
 import GraphVisualizer from './pages/Graphs/GraphVisualizer';
-import CodeVisualizer from './pages/CodeVisualizer/CodeVisualizer';
+import LoginPage from './pages/Auth/LoginPage';
+import RegisterPage from './pages/Auth/RegisterPage';
+import ProfilePage from './pages/Auth/ProfilePage';
 import './App.css';
 
 function App() {
@@ -18,13 +21,40 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/sorting" element={<SortingVisualizer />} />
-          <Route path="/searching" element={<SearchingVisualizer />} />
-          <Route path="/trees" element={<TreeVisualizer />} />
-          <Route path="/stack-queue" element={<StackQueueVisualizer />} />
-          <Route path="/graphs" element={<GraphVisualizer />} />
-          <Route path="/code-visualizer" element={<CodeVisualizer />} />
-
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          
+          {/* Protected Routes - Require Authentication */}
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/sorting" element={
+            <ProtectedRoute>
+              <SortingVisualizer />
+            </ProtectedRoute>
+          } />
+          <Route path="/searching" element={
+            <ProtectedRoute>
+              <SearchingVisualizer />
+            </ProtectedRoute>
+          } />
+          <Route path="/trees" element={
+            <ProtectedRoute>
+              <TreeVisualizer />
+            </ProtectedRoute>
+          } />
+          <Route path="/stack-queue" element={
+            <ProtectedRoute>
+              <StackQueueVisualizer />
+            </ProtectedRoute>
+          } />
+          <Route path="/graphs" element={
+            <ProtectedRoute>
+              <GraphVisualizer />
+            </ProtectedRoute>
+          } />
         </Routes>
       </main>
       <Footer />

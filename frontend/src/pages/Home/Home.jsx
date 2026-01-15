@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import '../../styles/protected-routes.css';
 import './Home.css';
 
 function Home() {
+  const { isAuthenticated } = useAuth();
   const features = [
     {
       icon: '📊',
@@ -80,6 +83,17 @@ function Home() {
         </div>
       </section>
 
+      {/* Login Reminder for Non-Authenticated Users */}
+      {!isAuthenticated && (
+        <div className="login-reminder">
+          <h3>🔐 Unlock Full Access</h3>
+          <p>Sign up or log in to access all algorithm visualizers and track your progress!</p>
+          <Link to="/register">Create Free Account</Link>
+          <span style={{ margin: '0 10px', opacity: 0.8 }}>or</span>
+          <Link to="/login">Log In</Link>
+        </div>
+      )}
+
       {/* Stats Section */}
       <section className="stats-section">
         <div className="stats-grid">
@@ -96,27 +110,48 @@ function Home() {
       <section className="features-section">
         <h2 className="section-title">Explore Data Structures</h2>
         <p className="section-subtitle">
-          Choose a category to start visualizing and understanding algorithms
+          {isAuthenticated 
+            ? 'Choose a category to start visualizing and understanding algorithms'
+            : 'Sign in to unlock all features'
+          }
         </p>
         
         <div className="features-grid">
           {features.map((feature, index) => (
-            <Link
-              key={index}
-              to={feature.path}
-              className="feature-card slide-in"
-              style={{ 
-                animationDelay: `${index * 0.1}s`,
-                '--card-color': feature.color
-              }}
-            >
-              <div className="feature-icon" style={{ backgroundColor: feature.color }}>
-                {feature.icon}
+            isAuthenticated ? (
+              <Link
+                key={index}
+                to={feature.path}
+                className="feature-card slide-in"
+                style={{ 
+                  animationDelay: `${index * 0.1}s`,
+                  '--card-color': feature.color
+                }}
+              >
+                <div className="feature-icon" style={{ backgroundColor: feature.color }}>
+                  {feature.icon}
+                </div>
+                <h3 className="feature-title">{feature.title}</h3>
+                <p className="feature-description">{feature.description}</p>
+                <div className="feature-arrow">→</div>
+              </Link>
+            ) : (
+              <div
+                key={index}
+                className="feature-card slide-in locked"
+                style={{ 
+                  animationDelay: `${index * 0.1}s`,
+                  '--card-color': feature.color
+                }}
+              >
+                <div className="feature-icon" style={{ backgroundColor: feature.color }}>
+                  {feature.icon}
+                </div>
+                <h3 className="feature-title">{feature.title}</h3>
+                <p className="feature-description">{feature.description}</p>
+                <div className="lock-badge">🔒 Sign In to Access</div>
               </div>
-              <h3 className="feature-title">{feature.title}</h3>
-              <p className="feature-description">{feature.description}</p>
-              <div className="feature-arrow">→</div>
-            </Link>
+            )
           ))}
         </div>
       </section>
@@ -126,9 +161,15 @@ function Home() {
         <div className="cta-content">
           <h2>Ready to Master DSA?</h2>
           <p>Start your journey with interactive visualizations and step-by-step guidance</p>
-          <Link to="/sorting" className="btn primary-btn large">
-            🎯 Start Learning Now
-          </Link>
+          {isAuthenticated ? (
+            <Link to="/sorting" className="btn primary-btn large">
+              🎯 Start Learning Now
+            </Link>
+          ) : (
+            <Link to="/register" className="btn primary-btn large">
+              🚀 Get Started Free
+            </Link>
+          )}
         </div>
       </section>
     </div>

@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const navItems = [
     { path: '/', label: 'Home', icon: '🏠' },
@@ -13,7 +17,8 @@ function Navbar() {
     { path: '/trees', label: 'Trees', icon: '🌳' },
     { path: '/stack-queue', label: 'Stack & Queue', icon: '📚' },
     { path: '/graphs', label: 'Graphs', icon: '🕸' },
-    { path: '/code-visualizer', label: 'Code Visualizer', icon: '💻' }
+    // { path: '/code-visualizer', label: 'Code Visualizer', icon: '💻' }
+    {}
   ];
 
   return (
@@ -36,6 +41,58 @@ function Navbar() {
               {item.label}
             </Link>
           ))}
+        </div>
+
+        <div className="nav-auth">
+          {isAuthenticated ? (
+            <div className="profile-menu">
+              <button
+                className="profile-button"
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+              >
+                <span className="profile-avatar">
+                  {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
+                </span>
+                <span className="profile-name">{user.firstName}</span>
+                <span className="dropdown-arrow">▼</span>
+              </button>
+              
+              {isProfileOpen && (
+                <div className="profile-dropdown">
+                  <Link
+                    to="/profile"
+                    className="dropdown-item"
+                    onClick={() => {
+                      setIsProfileOpen(false);
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    👤 My Profile
+                  </Link>
+                  <button
+                    className="dropdown-item logout-btn"
+                    onClick={() => {
+                      logout();
+                      setIsProfileOpen(false);
+                      setIsMenuOpen(false);
+                      navigate('/');
+                    }}
+                  >
+                    🚪 Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="auth-buttons">
+              <Link to="/login" className="btn btn-login">
+                Login
+              </Link>
+              <Link to="/register" className="btn btn-signup">
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
 
         <div 
