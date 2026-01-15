@@ -12,6 +12,9 @@ import GraphVisualizer from './pages/Graphs/GraphVisualizer';
 import LoginPage from './pages/Auth/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage';
 import ProfilePage from './pages/Auth/ProfilePage';
+import ChallengesPage from './pages/Challenges/ChallengesPage';
+import ChallengeDetail from './pages/Challenges/ChallengeDetail';
+import LeaderboardPage from './pages/Challenges/LeaderboardPage';
 import './App.css';
 
 function App() {
@@ -23,6 +26,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
           
           {/* Protected Routes - Require Authentication */}
           <Route path="/profile" element={
@@ -55,6 +60,19 @@ function App() {
               <GraphVisualizer />
             </ProtectedRoute>
           } />
+           <Route path="/challenges" element={
+            <ProtectedRoute>
+              <ChallengesPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/challenges/:id" element={
+            <ProtectedRoute>
+              <ChallengeDetail />
+            </ProtectedRoute>
+          } />
+
+
         </Routes>
       </main>
       <Footer />

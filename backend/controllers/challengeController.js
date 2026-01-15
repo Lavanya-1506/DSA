@@ -25,10 +25,34 @@ export const getAllChallenges = async (req, res) => {
       .populate('createdBy', 'firstName lastName')
       .sort({ createdAt: -1 });
 
+    // Calculate stats from submissions for each challenge
+    const challengesWithStats = await Promise.all(
+      challenges.map(async (challenge) => {
+        const submissions = await Submission.find({ challengeId: challenge._id });
+        
+        const totalAttempts = submissions.length;
+        const totalSolutions = submissions.filter(s => s.status === 'Accepted').length;
+        const acceptanceRate = totalAttempts > 0 ? ((totalSolutions / totalAttempts) * 100) : 0;
+        const avgTime = submissions.length > 0 
+          ? Math.round(submissions.reduce((sum, s) => sum + (s.executionTime || 0), 0) / submissions.length)
+          : 0;
+
+        return {
+          ...challenge.toObject(),
+          stats: {
+            totalAttempts,
+            totalSolutions,
+            acceptanceRate: parseFloat(acceptanceRate.toFixed(2)),
+            averageTime: avgTime
+          }
+        };
+      })
+    );
+
     res.status(200).json({
       success: true,
-      count: challenges.length,
-      challenges,
+      count: challengesWithStats.length,
+      challenges: challengesWithStats,
     });
   } catch (error) {
     res.status(500).json({
@@ -51,9 +75,29 @@ export const getChallenge = async (req, res) => {
       });
     }
 
+    // Calculate stats from submissions
+    const submissions = await Submission.find({ challengeId: id });
+    
+    const totalAttempts = submissions.length;
+    const totalSolutions = submissions.filter(s => s.status === 'Accepted').length;
+    const acceptanceRate = totalAttempts > 0 ? ((totalSolutions / totalAttempts) * 100) : 0;
+    const avgTime = submissions.length > 0 
+      ? Math.round(submissions.reduce((sum, s) => sum + (s.executionTime || 0), 0) / submissions.length)
+      : 0;
+
+    const challengeWithStats = {
+      ...challenge.toObject(),
+      stats: {
+        totalAttempts,
+        totalSolutions,
+        acceptanceRate: parseFloat(acceptanceRate.toFixed(2)),
+        averageTime: avgTime
+      }
+    };
+
     res.status(200).json({
       success: true,
-      challenge,
+      challenge: challengeWithStats,
     });
   } catch (error) {
     res.status(500).json({

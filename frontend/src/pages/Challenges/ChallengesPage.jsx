@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { challengeAPI } from '../../utils/challengeAPI';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { challengeAPI, submissionAPI } from '../../utils/challengeAPI';
+import CodeEditor from '../../components/CodeEditor';
 import './ChallengesPage.css';
 
 const ChallengesPage = () => {
@@ -11,7 +12,13 @@ const ChallengesPage = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [tempDifficulty, setTempDifficulty] = useState('All');
+  const [tempCategory, setTempCategory] = useState('All');
+  const [tempSearchTerm, setTempSearchTerm] = useState('');
+  const [selectedChallenge, setSelectedChallenge] = useState(null);
+  const [showEditor, setShowEditor] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const difficulties = ['All', 'Easy', 'Medium', 'Hard'];
   const categories = [
@@ -20,8 +27,7 @@ const ChallengesPage = () => {
     'Searching',
     'Trees',
     'Graphs',
-    'Stacks',
-    'Queues',
+    'Stack & Queue',
     'Dynamic Programming',
   ];
 
@@ -29,46 +35,124 @@ const ChallengesPage = () => {
     fetchChallenges();
   }, []);
 
+  // Handle category from URL parameters
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('category');
+    if (categoryFromUrl) {
+      // Map URL param to category name
+      const categoryMap = {
+        'sorting': 'Sorting',
+        'searching': 'Searching',
+        'trees': 'Trees',
+        'graphs': 'Graphs',
+        'stack-queue': 'Stack & Queue',
+        'dynamic-programming': 'Dynamic Programming'
+      };
+      const mappedCategory = categoryMap[categoryFromUrl.toLowerCase()];
+      if (mappedCategory) {
+        setTempCategory(mappedCategory);
+        setSelectedCategory(mappedCategory);
+      }
+    }
+  }, [searchParams]);
+
+  const applyFilters = () => {
+    console.log('Applying filters:', { tempDifficulty, tempCategory, tempSearchTerm });
+    console.log('Current challenges count:', challenges.length);
+    setSelectedDifficulty(tempDifficulty);
+    setSelectedCategory(tempCategory);
+    setSearchTerm(tempSearchTerm);
+  };
+
+  const resetFilters = () => {
+    setTempDifficulty('All');
+    setTempCategory('All');
+    setTempSearchTerm('');
+    setSelectedDifficulty('All');
+    setSelectedCategory('All');
+    setSearchTerm('');
+  };
+
   const fetchChallenges = async () => {
     try {
       setLoading(true);
       console.log('Fetching challenges from:', import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
       const data = await challengeAPI.getAllChallenges();
       console.log('Challenges fetched:', data);
-      setChallenges(data);
-      setFilteredChallenges(data);
+      
+      // Extract challenges from response - API returns { success, count, challenges }
+      let challengesArray = [];
+      if (Array.isArray(data)) {
+        challengesArray = data;
+      } else if (data && data.challenges && Array.isArray(data.challenges)) {
+        challengesArray = data.challenges;
+      } else if (data && data.data && Array.isArray(data.data)) {
+        challengesArray = data.data;
+      }
+      
+      console.log('Extracted challenges array with length:', challengesArray.length);
+      if (challengesArray.length > 0) {
+        console.log('First challenge:', challengesArray[0]);
+      }
+      
+      setChallenges(challengesArray);
       setError('');
     } catch (err) {
       console.error('Error fetching challenges:', err);
       setError(err.message || 'Failed to load challenges. Make sure backend is running.');
       setChallenges([]);
+      setFilteredChallenges([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    let filtered = challenges;
+    if (!challenges || challenges.length === 0) {
+      console.log('No challenges to filter');
+      setFilteredChallenges([]);
+      return;
+    }
+
+    console.log('=== Starting filter logic ===');
+    console.log('Total challenges:', challenges.length);
+    console.log('Filters:', { selectedDifficulty, selectedCategory, searchTerm });
+
+    let filtered = [...challenges];
 
     // Filter by difficulty
     if (selectedDifficulty !== 'All') {
-      filtered = filtered.filter((c) => c.difficulty === selectedDifficulty);
+      const beforeCount = filtered.length;
+      filtered = filtered.filter((c) => {
+        console.log(`Challenge "${c.title}" difficulty: ${c.difficulty}, looking for: ${selectedDifficulty}`);
+        return c.difficulty === selectedDifficulty;
+      });
+      console.log(`After difficulty filter: ${beforeCount} -> ${filtered.length}`);
     }
 
     // Filter by category
     if (selectedCategory !== 'All') {
-      filtered = filtered.filter((c) => c.category === selectedCategory);
+      const beforeCount = filtered.length;
+      filtered = filtered.filter((c) => {
+        console.log(`Challenge "${c.title}" category: ${c.category}, looking for: ${selectedCategory}`);
+        return c.category === selectedCategory;
+      });
+      console.log(`After category filter: ${beforeCount} -> ${filtered.length}`);
     }
 
     // Filter by search term
     if (searchTerm) {
+      const beforeCount = filtered.length;
       filtered = filtered.filter(
         (c) =>
           c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           c.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      console.log(`After search filter: ${beforeCount} -> ${filtered.length}`);
     }
 
+    console.log('Final filtered challenges count:', filtered.length);
+    console.log('=== End filter logic ===');
     setFilteredChallenges(filtered);
   }, [challenges, selectedDifficulty, selectedCategory, searchTerm]);
 
@@ -113,9 +197,9 @@ const ChallengesPage = () => {
                 <button
                   key={diff}
                   className={`filter-btn ${
-                    selectedDifficulty === diff ? 'active' : ''
+                    tempDifficulty === diff ? 'active' : ''
                   }`}
-                  onClick={() => setSelectedDifficulty(diff)}
+                  onClick={() => setTempDifficulty(diff)}
                 >
                   {diff}
                 </button>
@@ -130,14 +214,19 @@ const ChallengesPage = () => {
                 <button
                   key={cat}
                   className={`filter-btn ${
-                    selectedCategory === cat ? 'active' : ''
+                    tempCategory === cat ? 'active' : ''
                   }`}
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => setTempCategory(cat)}
                 >
                   {cat}
                 </button>
               ))}
             </div>
+          </div>
+
+          <div className="filter-section">
+            <button className="apply-btn" onClick={applyFilters}>Apply Filters</button>
+            <button className="reset-btn" onClick={resetFilters}>Reset All</button>
           </div>
         </div>
 
@@ -148,10 +237,11 @@ const ChallengesPage = () => {
             <input
               type="text"
               placeholder="Search challenges by title or description..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={tempSearchTerm}
+              onChange={(e) => setTempSearchTerm(e.target.value)}
               className="search-input"
             />
+            <button className="search-btn" onClick={applyFilters}>Search</button>
           </div>
 
           {/* Challenges List */}
@@ -161,23 +251,19 @@ const ChallengesPage = () => {
             </div>
           )}
 
-          {filteredChallenges.length === 0 ? (
+          {filteredChallenges && filteredChallenges.length === 0 ? (
             <div className="no-challenges">
               <p>No challenges found matching your criteria.</p>
               <button
                 className="reset-btn"
-                onClick={() => {
-                  setSelectedDifficulty('All');
-                  setSelectedCategory('All');
-                  setSearchTerm('');
-                }}
+                onClick={resetFilters}
               >
                 Reset Filters
               </button>
             </div>
           ) : (
             <div className="challenges-grid">
-              {filteredChallenges.map((challenge) => (
+              {Array.isArray(filteredChallenges) && filteredChallenges.map((challenge) => (
                 <div
                   key={challenge._id}
                   className="challenge-card"
@@ -220,12 +306,21 @@ const ChallengesPage = () => {
                     <div className="stat">
                       <span className="stat-label">Acceptance:</span>
                       <span className="stat-value">
-                        {challenge.stats?.acceptanceRate.toFixed(1)}%
+                        {challenge.stats?.acceptanceRate ? challenge.stats.acceptanceRate.toFixed(1) : '0.0'}%
                       </span>
                     </div>
                   </div>
 
-                  <button className="solve-btn">Solve Challenge</button>
+                  <button 
+                    className="solve-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedChallenge(challenge);
+                      setShowEditor(true);
+                    }}
+                  >
+                    Solve Challenge
+                  </button>
                 </div>
               ))}
             </div>
@@ -239,6 +334,17 @@ const ChallengesPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Code Editor Modal */}
+      {showEditor && selectedChallenge && (
+        <CodeEditor
+          challenge={selectedChallenge}
+          onClose={() => {
+            setShowEditor(false);
+            setSelectedChallenge(null);
+          }}
+        />
+      )}
     </div>
   );
 };

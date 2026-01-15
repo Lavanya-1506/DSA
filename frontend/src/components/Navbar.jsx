@@ -12,13 +12,14 @@ function Navbar() {
 
   const navItems = [
     { path: '/', label: 'Home', icon: '🏠' },
-    { path: '/sorting', label: 'Sorting', icon: '📊' },
-    { path: '/searching', label: 'Searching', icon: '🔍' },
-    { path: '/trees', label: 'Trees', icon: '🌳' },
-    { path: '/stack-queue', label: 'Stack & Queue', icon: '📚' },
-    { path: '/graphs', label: 'Graphs', icon: '🕸' },
+    { path: '/challenges', label: 'Challenges', icon: '🎯' },
+    { path: '/leaderboard', label: 'Leaderboard', icon: '🏆' },
+    { path: '/challenges?category=sorting', label: 'Sorting', icon: '📊' },
+    { path: '/challenges?category=searching', label: 'Searching', icon: '🔍' },
+    { path: '/challenges?category=trees', label: 'Trees', icon: '🌳' },
+    { path: '/challenges?category=stack-queue', label: 'Stack & Queue', icon: '📚' },
+    { path: '/challenges?category=graphs', label: 'Graphs', icon: '🕸' }
     // { path: '/code-visualizer', label: 'Code Visualizer', icon: '💻' }
-    {}
   ];
 
   return (
