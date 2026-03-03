@@ -67,6 +67,18 @@ export const challengeAPI = {
 
 // Submission API calls
 export const submissionAPI = {
+  // Run code against challenge test cases without saving submission
+  runCode: ({ challengeId, code, language, testCases }) =>
+    apiCall('/submissions/run', {
+      method: 'POST',
+      body: JSON.stringify({
+        challengeId,
+        code,
+        language,
+        testCases,
+      }),
+    }),
+
   // Submit solution
   submitSolution: (challengeId, code, language = 'JavaScript') =>
     apiCall('/submissions', {
@@ -102,10 +114,13 @@ export const leaderboardAPI = {
     apiCall(`/leaderboard${query}`, { method: 'GET' }),
 
   // Get detailed leaderboard
-  getDetailedLeaderboard: (limit = 50) =>
-    apiCall(`/leaderboard/detailed?limit=${limit}`, { method: 'GET' }),
+  getDetailedLeaderboard: ({ limit = 50, sortBy = 'solved', timeRange = 'all' } = {}) =>
+    apiCall(
+      `/leaderboard/detailed?limit=${encodeURIComponent(limit)}&sortBy=${encodeURIComponent(sortBy)}&timeRange=${encodeURIComponent(timeRange)}`,
+      { method: 'GET' }
+    ),
 
   // Get user ranking
-  getUserRanking: () =>
-    apiCall('/leaderboard/user-ranking', { method: 'GET' }),
+  getUserRanking: ({ timeRange = 'all' } = {}) =>
+    apiCall(`/leaderboard/user-ranking?timeRange=${encodeURIComponent(timeRange)}`, { method: 'GET' }),
 };

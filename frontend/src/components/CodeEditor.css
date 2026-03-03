@@ -88,13 +88,19 @@
   font-size: 1rem;
 }
 
-.language-badge {
+.language-select {
   background: rgba(0, 212, 255, 0.2);
   color: #00d4ff;
-  padding: 0.25rem 0.75rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 4px;
   font-size: 0.85rem;
   border: 1px solid rgba(0, 212, 255, 0.3);
+  outline: none;
+}
+
+.language-select option {
+  background: #0f1c35;
+  color: #d9f6ff;
 }
 
 .panel-body {
@@ -183,6 +189,50 @@
   padding: 1rem;
 }
 
+.verdict-card {
+  border-radius: 8px;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid transparent;
+}
+
+.verdict-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.verdict-message {
+  font-size: 0.88rem;
+}
+
+.verdict-detail {
+  margin-top: 0.55rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.verdict-card.accepted {
+  background: rgba(76, 175, 80, 0.16);
+  border-color: rgba(76, 175, 80, 0.5);
+  color: #9dffad;
+}
+
+.verdict-card.wrong {
+  background: rgba(255, 152, 0, 0.16);
+  border-color: rgba(255, 152, 0, 0.45);
+  color: #ffd38b;
+}
+
+.verdict-card.runtime,
+.verdict-card.error,
+.verdict-card.invalid {
+  background: rgba(244, 67, 54, 0.16);
+  border-color: rgba(244, 67, 54, 0.45);
+  color: #ff9f9a;
+}
+
 .output-text {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(0, 212, 255, 0.2);
@@ -195,6 +245,46 @@
   line-height: 1.5;
   max-height: 200px;
   overflow-y: auto;
+}
+
+.terminal-output {
+  background: #101418;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #7cff8d;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 0.75rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  max-height: 220px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.program-output-block {
+  margin-top: 0.75rem;
+}
+
+.program-output-block h4 {
+  margin: 0 0 0.5rem;
+  color: #7dd3fc;
+  font-size: 0.9rem;
+}
+
+.program-output-text {
+  margin: 0;
+  padding: 0.8rem;
+  border-radius: 4px;
+  background: #091826;
+  border: 1px solid rgba(125, 211, 252, 0.25);
+  color: #d1f0ff;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  max-height: 180px;
+  overflow-y: auto;
+  white-space: pre-wrap;
 }
 
 .test-results {
@@ -236,6 +326,21 @@
 
 .result-message {
   flex: 1;
+}
+
+.result-title {
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.result-line {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+.result-error {
+  color: #ff8d8d;
 }
 
 /* Editor Footer */

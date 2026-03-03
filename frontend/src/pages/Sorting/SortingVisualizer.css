@@ -148,6 +148,20 @@
   color: #d4d4d4;
 }
 
+.algorithm-steps {
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 15px;
+  min-height: 60px;
+}
+
+.step-text {
+  color: #fff;
+  font-family: monospace;
+  animation: fadeIn 0.3s ease-in;
+}
+
+
 @media screen and (max-width: 768px) {
   .sorting-visualizer {
     padding: 1rem;

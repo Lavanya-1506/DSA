@@ -22,9 +22,37 @@ const LeaderboardPage = () => {
   const fetchLeaderboard = async () => {
     try {
       setLoading(true);
-      const query = `?sortBy=${sortBy}&timeRange=${timeRange}&limit=100`;
-      const data = await leaderboardAPI.getDetailedLeaderboard();
-      setLeaderboard(data);
+      const data = await leaderboardAPI.getDetailedLeaderboard({
+        limit: 100,
+        sortBy,
+        timeRange,
+      });
+      const rawList = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.leaderboard)
+          ? data.leaderboard
+          : Array.isArray(data?.data)
+            ? data.data
+            : [];
+
+      const normalized = rawList.map((entry, idx) => {
+        const username =
+          entry.username ||
+          `${entry.firstName || ''} ${entry.lastName || ''}`.trim() ||
+          `User ${idx + 1}`;
+
+        return {
+          userId: entry.userId || entry._id || `${idx}`,
+          username,
+          email: entry.email || '',
+          problemsSolved: entry.problemsSolved ?? entry.totalSolved ?? 0,
+          acceptanceRate: Number(entry.acceptanceRate ?? 0),
+          totalSubmissions: entry.totalSubmissions ?? 0,
+          currentStreak: entry.currentStreak ?? 0,
+        };
+      });
+
+      setLeaderboard(normalized);
       setError('');
     } catch (err) {
       setError(err.message);
@@ -36,8 +64,19 @@ const LeaderboardPage = () => {
 
   const fetchUserRanking = async () => {
     try {
-      const data = await leaderboardAPI.getUserRanking();
-      setUserRanking(data);
+      const data = await leaderboardAPI.getUserRanking({ timeRange });
+      const ranking = data?.ranking || data;
+      if (!ranking) {
+        setUserRanking(null);
+        return;
+      }
+      setUserRanking({
+        rank: ranking.rank ?? 0,
+        problemsSolved: ranking.problemsSolved ?? ranking.totalSolved ?? 0,
+        acceptanceRate: ranking.acceptanceRate ?? 0,
+        totalSubmissions: ranking.totalSubmissions ?? 0,
+        currentStreak: ranking.currentStreak ?? 0,
+      });
     } catch (err) {
       console.error('Error fetching user ranking:', err);
     }
@@ -100,6 +139,10 @@ const LeaderboardPage = () => {
                 {userRanking.totalSubmissions}
               </span>
             </div>
+            <div className="ranking-stat">
+              <span className="ranking-label">Current Streak</span>
+              <span className="ranking-value">{userRanking.currentStreak}</span>
+            </div>
           </div>
         </div>
       )}
@@ -160,7 +203,7 @@ const LeaderboardPage = () => {
             <tbody>
               {leaderboard.map((entry, idx) => (
                 <tr
-                  key={entry.userId}
+                  key={entry.userId || idx}
                   className={`leaderboard-row ${getRankColor(idx + 1)} ${
                     user && entry.userId === user._id ? 'current-user' : ''
                   }`}
@@ -174,7 +217,7 @@ const LeaderboardPage = () => {
                   <td className="name-col">
                     <div className="user-info">
                       <div className="user-avatar">
-                        {entry.username[0].toUpperCase()}
+                        {(entry.username?.[0] || 'U').toUpperCase()}
                       </div>
                       <div className="user-details">
                         <div className="user-name">

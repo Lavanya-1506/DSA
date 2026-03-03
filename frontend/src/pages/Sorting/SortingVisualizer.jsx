@@ -5,6 +5,8 @@ function SortingVisualizer() {
   const [array, setArray] = useState(generateRandomArray());
   const [isSorting, setIsSorting] = useState(false);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('bubble');
+  // const [currentStepText, setCurrentStepText] = useState('');
+
 
   function generateRandomArray() {
     return Array.from({ length: 15 }, () => Math.floor(Math.random() * 100) + 10);
@@ -15,6 +17,11 @@ function SortingVisualizer() {
     { id: 'quick', name: 'Quick Sort', complexity: 'O(n log n)' },
     { id: 'merge', name: 'Merge Sort', complexity: 'O(n log n)' }
   ];
+
+  // const animation = animation[currentAnimationIndex];
+
+  //  setCurrentStepText(animation.text);
+
 
   const handleSort = async () => {
     setIsSorting(true);

@@ -1,33 +1,38 @@
 import React from 'react';
 import './ChallengeModal.css';
 
-function ChallengeModal({ isOpen, onClose }) {
+function ChallengeModal({ isOpen, onClose, onSelectChallenge }) {
   if (!isOpen) return null;
 
   const challenges = [
     {
+      title: "Median Two Arrays",
+      difficulty: "Medium",
+      points: 300,
+      description: "Find median of two sorted arrays",
+      testCases: [
+        { input: "[1,3]# [2]", output: "2" },
+        { input: "[1,2]# [3,4]", output: "2.5" },
+        { input: "[]# [1]", output: "1" }
+      ]
+    },
+    {
       title: "Array Rotation",
       difficulty: "Easy",
       points: 100,
-      description: "Rotate an array by k positions"
+      description: "Rotate an array by k positions",
+      testCases: [
+        { input: "[1,2,3,4]#2", output: "[3,4,1,2]" }
+      ]
     },
     {
       title: "Linked List Cycle",
       difficulty: "Medium",
       points: 200,
-      description: "Detect cycle in a linked list"
-    },
-    {
-      title: "Binary Tree Traversal",
-      difficulty: "Medium",
-      points: 250,
-      description: "Implement inorder traversal without recursion"
-    },
-    {
-      title: "Graph Shortest Path",
-      difficulty: "Hard",
-      points: 500,
-      description: "Find shortest path using Dijkstra's algorithm"
+      description: "Detect cycle in a linked list",
+      testCases: [
+        { input: "1->2->3->4", output: "false" }
+      ]
     }
   ];
 
@@ -67,7 +72,7 @@ function ChallengeModal({ isOpen, onClose }) {
               <p className="challenge-description">{challenge.description}</p>
               <div className="challenge-footer">
                 <span className="points">⭐ {challenge.points} points</span>
-                <button className="start-btn">Start Challenge</button>
+                <button className="start-btn" onClick={() => onSelectChallenge && onSelectChallenge(challenge)}>Start Challenge</button>
               </div>
             </div>
           ))}

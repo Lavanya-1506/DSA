@@ -11,6 +11,7 @@ import {
 } from '../controllers/challengeController.js';
 import {
   submitSolution,
+  runCode,
   getChallengeSubmissions,
   getUserSubmissions,
   getSubmission,
@@ -32,6 +33,8 @@ router.put('/challenges/:id', protect, authorize('admin'), updateChallenge);
 router.delete('/challenges/:id', protect, authorize('admin'), deleteChallenge);
 
 // Submission Routes
+// Run code quickly (unprotected) - used for 'Run Code' in editor to show outputs/errors
+router.post('/submissions/run', runCode);
 router.post('/submissions', protect, submitSolution);
 router.get('/submissions/user', protect, getUserSubmissions);
 router.get('/submissions/user/progress', protect, getUserChallengeProgress);
