@@ -49,14 +49,23 @@ The objective of DSA Insight is to make learning Data Structures and Algorithms 
 **Tech Stack used in this Project**
 **Backend**
 -Runtime: Node.js (using ES modules)
+
 -Framework: Express.js (for building the REST API)
+
 -Database: MongoDB (with Mongoose as the ODM for data modeling)
+
 -Authentication: JSON Web Tokens (jsonwebtoken) with bcryptjs for password hashing
+
 Other Libraries:
+
 -CORS handling (cors)
+
 -Environment variables (dotenv)
+
 -HTTP requests (node-fetch)
+
 -Development Tools:
+
 -Nodemon (for auto-restarting during development)
 
 **Frontend**
