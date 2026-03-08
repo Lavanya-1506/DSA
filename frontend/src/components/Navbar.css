@@ -12,6 +12,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 }
 
 .nav-logo {
@@ -22,6 +23,8 @@
   font-size: 1.5rem;
   font-weight: bold;
   transition: transform 0.3s ease;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
 }
 
 .nav-logo:hover {
@@ -30,12 +33,15 @@
 
 .logo-placeholder {
   font-size: 2rem;
-  margin-right: 10px;
+  margin-right: 0.65rem;
 }
 
 .nav-menu {
   display: flex;
-  gap: 1rem;
+  flex: 1;
+  justify-content: center;
+  gap: clamp(0.35rem, 0.7vw, 0.95rem);
+  margin: 0 0.6rem;
   list-style: none;
 }
 
@@ -43,14 +49,15 @@
   color: white;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 1rem;
+  padding: 0.58rem 0.9rem;
   border-radius: 25px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  white-space: nowrap;
 }
 
 .nav-link::before {
@@ -111,6 +118,7 @@
     transition: 0.3s;
     padding: 2rem 0;
     gap: 0;
+    margin: 0;
   }
 
   .nav-menu.active {
@@ -145,7 +153,11 @@
 .nav-auth {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 1rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  min-width: max-content;
 }
 
 .auth-buttons {
@@ -191,20 +203,24 @@
   position: relative;
   display: flex;
   align-items: center;
+  height: 48px;
 }
 
 .profile-button {
   background: rgba(255, 255, 255, 0.1);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 25px;
-  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  height: 48px;
+  padding: 0 0.9rem 0 0.55rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
+  line-height: 1;
 }
 
 .profile-button:hover {
@@ -229,6 +245,9 @@
 }
 
 .dropdown-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.8rem;
   transition: transform 0.3s;
 }

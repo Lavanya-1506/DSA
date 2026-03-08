@@ -26,6 +26,7 @@ function GraphVisualizer() {
   const [visitedNodes, setVisitedNodes] = useState([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [traversalResult, setTraversalResult] = useState([]);
+  const [traversalOutput, setTraversalOutput] = useState('');
 
   const algorithms = [
     { id: 'bfs', name: 'Breadth-First Search', complexity: 'O(V + E)' },
@@ -36,6 +37,7 @@ function GraphVisualizer() {
     setIsAnimating(true);
     setVisitedNodes([]);
     setTraversalResult([]);
+    setTraversalOutput('');
 
     if (selectedAlgorithm === 'bfs') {
       await runBFS();
@@ -50,6 +52,7 @@ function GraphVisualizer() {
     const visited = new Set();
     const queue = [startNode];
     const result = [];
+    const order = [];
     
     visited.add(startNode);
     result.push(`Starting BFS from node ${startNode}`);
@@ -60,6 +63,7 @@ function GraphVisualizer() {
       setTraversalResult([...result]);
       
       result.push(`Visiting node ${current}`);
+      order.push(current);
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       const neighbors = graph.edges
@@ -80,7 +84,10 @@ function GraphVisualizer() {
       }
     }
     
+    const output = `Traversal Output: ${order.join(' -> ')}`;
+    result.push(output);
     result.push('BFS traversal completed!');
+    setTraversalOutput(output);
     setTraversalResult([...result]);
   };
 
@@ -88,6 +95,7 @@ function GraphVisualizer() {
     const visited = new Set();
     const stack = [startNode];
     const result = [];
+    const order = [];
     
     result.push(`Starting DFS from node ${startNode}`);
 
@@ -100,6 +108,7 @@ function GraphVisualizer() {
         setTraversalResult([...result]);
         
         result.push(`Visiting node ${current}`);
+        order.push(current);
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         const neighbors = graph.edges
@@ -120,13 +129,17 @@ function GraphVisualizer() {
       }
     }
     
+    const output = `Traversal Output: ${order.join(' -> ')}`;
+    result.push(output);
     result.push('DFS traversal completed!');
+    setTraversalOutput(output);
     setTraversalResult([...result]);
   };
 
   const resetGraph = () => {
     setVisitedNodes([]);
     setTraversalResult([]);
+    setTraversalOutput('');
   };
 
   const Node = ({ node }) => (
@@ -228,44 +241,82 @@ function GraphVisualizer() {
       </div>
 
       <div className="visualization-area">
-        <div className="graph-container">
-          {graph.edges.map((edge, index) => (
-            <Edge key={index} edge={edge} />
-          ))}
-          {graph.nodes.map((node) => (
-            <Node key={node.id} node={node} />
-          ))}
-        </div>
-      </div>
-
-      {traversalResult.length > 0 && (
-        <div className="result-panel glass">
-          <h3>Traversal Steps</h3>
-          <div className="traversal-steps">
-            {traversalResult.slice(-8).map((step, index) => (
-              <div key={index} className="traversal-step">
-                {step}
-              </div>
+        <div className="graph-panel">
+          <div className="graph-container">
+            {graph.edges.map((edge, index) => (
+              <Edge key={index} edge={edge} />
+            ))}
+            {graph.nodes.map((node) => (
+              <Node key={node.id} node={node} />
             ))}
           </div>
         </div>
-      )}
+
+        <div className="traversal-panel glass">
+          <h3>Traversal Steps</h3>
+          <div className="traversal-steps">
+            {traversalResult.length === 0 ? (
+              <div className="traversal-step">Run the algorithm to see step-by-step traversal.</div>
+            ) : (
+              traversalResult.map((step, index) => (
+                <div key={index} className="traversal-step">
+                  {index + 1}. {step}
+                </div>
+              ))
+            )}
+          </div>
+          <div className="traversal-output">
+            {traversalOutput || 'Traversal output will appear here after completion.'}
+          </div>
+        </div>
+      </div>
+
+      <div className="algorithm-panel glass">
+        <h3>
+          {selectedAlgorithm === 'bfs'
+            ? 'Breadth-First Search (BFS)'
+            : 'Depth-First Search (DFS)'
+          }
+        </h3>
+        <p>
+          {selectedAlgorithm === 'bfs'
+            ? 'BFS explores all neighbors at the present depth prior to moving on to nodes at the next depth level. Uses a queue.'
+            : 'DFS explores as far as possible along each branch before backtracking. Uses a stack.'
+          }
+        </p>
+        <pre className="algorithm-code">
+          <code>
+            {selectedAlgorithm === 'bfs'
+              ? `BFS(graph, start):
+  queue = [start]
+  visited = {start}
+  order = []
+  while queue not empty:
+    node = dequeue(queue)
+    order.append(node)
+    for each neighbor of node:
+      if neighbor not in visited:
+        visited.add(neighbor)
+        enqueue(queue, neighbor)
+  return order`
+              : `DFS(graph, start):
+  stack = [start]
+  visited = {}
+  order = []
+  while stack not empty:
+    node = pop(stack)
+    if node not in visited:
+      visited.add(node)
+      order.append(node)
+      for each neighbor of node (reverse):
+        if neighbor not in visited:
+          push(stack, neighbor)
+  return order`}
+          </code>
+        </pre>
+      </div>
 
       <div className="info-panel glass">
-        <div className="algorithm-info">
-          <h3>
-            {selectedAlgorithm === 'bfs' 
-              ? 'Breadth-First Search (BFS)' 
-              : 'Depth-First Search (DFS)'
-            }
-          </h3>
-          <p>
-            {selectedAlgorithm === 'bfs'
-              ? 'BFS explores all neighbors at the present depth prior to moving on to nodes at the next depth level. Uses a queue.'
-              : 'DFS explores as far as possible along each branch before backtracking. Uses a stack.'
-            }
-          </p>
-        </div>
 
         <div className="complexity-info">
           <h4>Time & Space Complexity</h4>

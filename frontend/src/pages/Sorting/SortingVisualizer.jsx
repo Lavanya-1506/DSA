@@ -92,6 +92,7 @@ function SortingVisualizer() {
   const [isSorting, setIsSorting] = useState(false);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('bubble');
   const [currentStepText, setCurrentStepText] = useState('Select an algorithm and click Start Sorting.');
+  const [iterationSteps, setIterationSteps] = useState([]);
 
   const algorithms = [
     { id: 'bubble', name: 'Bubble Sort', complexity: 'O(n^2)' },
@@ -99,57 +100,80 @@ function SortingVisualizer() {
     { id: 'merge', name: 'Merge Sort', complexity: 'O(n log n)' },
   ];
 
+  const logStep = (text) => {
+    setCurrentStepText(text);
+    setIterationSteps((prev) => [...prev, text]);
+  };
+
   const runBubbleSort = async (working) => {
     for (let i = 0; i < working.length - 1; i++) {
       let swapped = false;
+      logStep(`Pass ${i + 1} started. Largest unsorted index: ${working.length - i - 1}.`);
       for (let j = 0; j < working.length - i - 1; j++) {
-        setCurrentStepText(`Pass ${i + 1}: compare ${working[j]} and ${working[j + 1]}.`);
+        logStep(`Pass ${i + 1}: compare ${working[j]} and ${working[j + 1]}.`);
         await sleep(170);
         if (working[j] > working[j + 1]) {
           [working[j], working[j + 1]] = [working[j + 1], working[j]];
           setArray([...working]);
           swapped = true;
-          setCurrentStepText(`Swapped ${working[j + 1]} and ${working[j]}.`);
+          logStep(`Swapped ${working[j + 1]} and ${working[j]}.`);
           await sleep(170);
+        } else {
+          logStep(`No swap needed for ${working[j]} and ${working[j + 1]}.`);
+          await sleep(100);
         }
       }
       if (!swapped) {
-        setCurrentStepText(`No swaps in pass ${i + 1}. Array already sorted.`);
+        logStep(`No swaps in pass ${i + 1}. Array already sorted.`);
         break;
       }
+      logStep(`Pass ${i + 1} complete.`);
     }
   };
 
   const partition = async (working, low, high) => {
     const pivot = working[high];
     let i = low - 1;
-    setCurrentStepText(`Partition [${low}, ${high}] with pivot ${pivot}.`);
+    logStep(`Partition [${low}, ${high}] with pivot ${pivot}.`);
     await sleep(210);
 
     for (let j = low; j < high; j++) {
-      setCurrentStepText(`Compare ${working[j]} with pivot ${pivot}.`);
+      logStep(`Compare ${working[j]} with pivot ${pivot}.`);
       await sleep(170);
       if (working[j] <= pivot) {
         i++;
         if (i !== j) {
           [working[i], working[j]] = [working[j], working[i]];
           setArray([...working]);
-          setCurrentStepText(`Move ${working[i]} to left partition.`);
+          logStep(`Move ${working[i]} to left partition.`);
           await sleep(170);
+        } else {
+          logStep(`${working[j]} already in correct side of pivot.`);
+          await sleep(100);
         }
+      } else {
+        logStep(`${working[j]} stays on right side of pivot ${pivot}.`);
+        await sleep(100);
       }
     }
 
     [working[i + 1], working[high]] = [working[high], working[i + 1]];
     setArray([...working]);
-    setCurrentStepText(`Placed pivot ${pivot} at index ${i + 1}.`);
+    logStep(`Placed pivot ${pivot} at index ${i + 1}.`);
     await sleep(210);
     return i + 1;
   };
 
   const quickSortRecursive = async (working, low, high) => {
-    if (low >= high) return;
+    if (low >= high) {
+      if (low === high) {
+        logStep(`Single element at index ${low} is already sorted.`);
+      }
+      return;
+    }
+    logStep(`Quick sort on subarray [${low}, ${high}].`);
     const p = await partition(working, low, high);
+    logStep(`Pivot fixed at index ${p}. Recurse on [${low}, ${p - 1}] and [${p + 1}, ${high}].`);
     await quickSortRecursive(working, low, p - 1);
     await quickSortRecursive(working, p + 1, high);
   };
@@ -165,35 +189,55 @@ function SortingVisualizer() {
     let j = 0;
     let k = left;
 
-    setCurrentStepText(`Merge [${left}, ${mid}] and [${mid + 1}, ${right}].`);
+    logStep(`Merge [${left}, ${mid}] and [${mid + 1}, ${right}].`);
     await sleep(210);
 
     while (i < leftArr.length && j < rightArr.length) {
+      logStep(`Compare left ${leftArr[i]} and right ${rightArr[j]}.`);
       if (leftArr[i] <= rightArr[j]) {
-        working[k++] = leftArr[i++];
+        working[k] = leftArr[i];
+        logStep(`Write ${leftArr[i]} at index ${k}.`);
+        i++;
       } else {
-        working[k++] = rightArr[j++];
+        working[k] = rightArr[j];
+        logStep(`Write ${rightArr[j]} at index ${k}.`);
+        j++;
       }
+      k++;
       setArray([...working]);
       await sleep(150);
     }
 
     while (i < leftArr.length) {
-      working[k++] = leftArr[i++];
+      working[k] = leftArr[i];
+      logStep(`Copy remaining left value ${leftArr[i]} to index ${k}.`);
+      i++;
+      k++;
       setArray([...working]);
       await sleep(140);
     }
 
     while (j < rightArr.length) {
-      working[k++] = rightArr[j++];
+      working[k] = rightArr[j];
+      logStep(`Copy remaining right value ${rightArr[j]} to index ${k}.`);
+      j++;
+      k++;
       setArray([...working]);
       await sleep(140);
     }
+
+    logStep(`Merged segment [${left}, ${right}] complete.`);
   };
 
   const mergeSortRecursive = async (working, left, right) => {
-    if (left >= right) return;
+    if (left >= right) {
+      if (left === right) {
+        logStep(`Single element segment [${left}] is sorted.`);
+      }
+      return;
+    }
     const mid = Math.floor((left + right) / 2);
+    logStep(`Split segment [${left}, ${right}] at mid ${mid}.`);
     await mergeSortRecursive(working, left, mid);
     await mergeSortRecursive(working, mid + 1, right);
     await mergeRanges(working, left, mid, right);
@@ -206,7 +250,8 @@ function SortingVisualizer() {
   const handleSort = async () => {
     if (isSorting) return;
     setIsSorting(true);
-    setCurrentStepText(`Starting ${algorithmMeta[selectedAlgorithm].label}...`);
+    setIterationSteps([]);
+    logStep(`Starting ${algorithmMeta[selectedAlgorithm].label}...`);
 
     try {
       const working = [...array];
@@ -215,7 +260,7 @@ function SortingVisualizer() {
       else await runMergeSort(working);
 
       setArray([...working]);
-      setCurrentStepText(`${algorithmMeta[selectedAlgorithm].label} complete. Array is sorted.`);
+      logStep(`${algorithmMeta[selectedAlgorithm].label} complete. Array is sorted.`);
     } finally {
       setIsSorting(false);
     }
@@ -223,6 +268,7 @@ function SortingVisualizer() {
 
   const resetArray = () => {
     setArray(generateRandomArray());
+    setIterationSteps([]);
     setCurrentStepText('Generated a new random array.');
   };
 
@@ -283,6 +329,13 @@ function SortingVisualizer() {
         <div className="algorithm-steps glass">
           <h3>Current Iteration</h3>
           <div className="step-text">{currentStepText}</div>
+          <div className="iteration-history">
+            {iterationSteps.map((step, index) => (
+              <div key={`${step}-${index}`} className="iteration-step">
+                <span className="step-index">{index + 1}.</span> {step}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
