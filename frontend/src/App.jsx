@@ -27,7 +27,11 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           
-          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/leaderboard" element={
+            <ProtectedRoute>
+              <LeaderboardPage />
+            </ProtectedRoute>
+          } />
           
           {/* Protected Routes - Require Authentication */}
           <Route path="/profile" element={

@@ -12,8 +12,8 @@ function Navbar() {
 
   const navItems = [
     { path: '/', label: 'Home', icon: '🏠' },
+    ...(isAuthenticated ? [{ path: '/leaderboard', label: 'Leaderboard', icon: '🏆' }] : []),
     { path: '/challenges', label: 'Challenges', icon: '🎯' },
-    { path: '/leaderboard', label: 'Leaderboard', icon: '🏆' },
     { path: '/sorting', label: 'Sorting', icon: '📊' },
     { path: '/searching', label: 'Searching', icon: '🔍' },
     { path: '/trees', label: 'Trees', icon: '🌳' },
