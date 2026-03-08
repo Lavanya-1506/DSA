@@ -57,7 +57,12 @@
 }
 
 .input-group input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.input-group select option {
+  color: #1f2340;
+  background: #f2f5ff;
 }
 
 .control-buttons {
@@ -69,12 +74,25 @@
 .visualization-area {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 15px;
-  padding: 2rem;
+  padding: 1.25rem;
   margin-bottom: 2rem;
-  min-height: 200px;
+  min-height: 430px;
+  display: grid;
+  grid-template-columns: 0.8fr 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.search-visual-panel,
+.search-steps-panel {
+  padding: 1rem;
+  border-radius: 14px;
+  min-height: 360px;
+}
+
+.search-visual-panel {
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .array-container {
@@ -174,6 +192,63 @@
   margin: 0;
 }
 
+.algorithm-panel {
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.algorithm-panel h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+}
+
+.algorithm-code {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 10px;
+  background: rgba(12, 16, 36, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #eaf0ff;
+  font-family: "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.search-steps-panel {
+  color: white;
+}
+
+.search-steps-panel h3 {
+  margin: 0 0 1rem 0;
+}
+
+.search-steps-empty {
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  padding: 0.7rem 0.2rem;
+}
+
+.search-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+}
+
+.search-step-item {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 3px solid #65d6ff;
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.95);
+}
+
 .info-panel {
   padding: 1.5rem;
   color: white;
@@ -224,6 +299,16 @@
 }
 
 @media screen and (max-width: 768px) {
+  .visualization-area {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .search-visual-panel,
+  .search-steps-panel {
+    min-height: auto;
+  }
+
   .searching-visualizer {
     padding: 1rem;
   }
@@ -246,3 +331,29 @@
   font-size: 1.2rem;
 }
 }
+/* Scoped layout fix: keep elements in one line */
+.searching-visualizer .visualization-area {
+  overflow: hidden;
+}
+
+.searching-visualizer .visualization-area .array-container {
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+  justify-content: space-between;
+  gap: clamp(0.3rem, 1vw, 1rem);
+}
+
+.searching-visualizer .array-element {
+  flex: 1 1 0;
+  min-width: 48px;
+  max-width: 80px;
+}
+
+@media screen and (max-width: 768px) {
+  .searching-visualizer .array-element {
+    min-width: 44px;
+    max-width: 60px;
+  }
+}
+

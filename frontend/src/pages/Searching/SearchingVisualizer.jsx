@@ -8,15 +8,42 @@ function SearchingVisualizer() {
   const [isSearching, setIsSearching] = useState(false);
   const [result, setResult] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('binary');
+  const [searchSteps, setSearchSteps] = useState([]);
 
   const algorithms = [
     { id: 'linear', name: 'Linear Search', complexity: 'O(n)' },
     { id: 'binary', name: 'Binary Search', complexity: 'O(log n)' }
   ];
+  const algorithmDetails = {
+    linear: {
+      title: 'Linear Search Algorithm',
+      code: `linearSearch(arr, target):
+  for i from 0 to length(arr) - 1:
+    if arr[i] == target:
+      return i
+  return -1`
+    },
+    binary: {
+      title: 'Binary Search Algorithm',
+      code: `binarySearch(arr, target):
+  left = 0
+  right = length(arr) - 1
+  while left <= right:
+    mid = floor((left + right) / 2)
+    if arr[mid] == target:
+      return mid
+    else if arr[mid] < target:
+      left = mid + 1
+    else:
+      right = mid - 1
+  return -1`
+    }
+  };
 
   const handleSearch = async () => {
     setIsSearching(true);
     setResult(null);
+    setSearchSteps([]);
     
     if (selectedAlgorithm === 'linear') {
       await linearSearch();
@@ -28,43 +55,66 @@ function SearchingVisualizer() {
   };
 
   const linearSearch = async () => {
+    const steps = [];
+
     for (let i = 0; i < array.length; i++) {
       setCurrentIndex(i);
+      steps.push(`Step ${steps.length + 1}: Check index ${i} (value ${array[i]}).`);
       await new Promise(resolve => setTimeout(resolve, 800));
       
       if (array[i] === target) {
+        steps.push(`Step ${steps.length + 1}: Match found. ${array[i]} equals target ${target}.`);
+        setSearchSteps(steps);
         setResult({ found: true, index: i });
         return;
       }
     }
+
+    steps.push(`Step ${steps.length + 1}: Target ${target} was not found after checking all elements.`);
+    setSearchSteps(steps);
     setResult({ found: false, index: -1 });
   };
 
   const binarySearch = async () => {
     let left = 0;
     let right = array.length - 1;
+    const steps = [];
     
     while (left <= right) {
       const mid = Math.floor((left + right) / 2);
       setCurrentIndex(mid);
+      steps.push(
+        `Step ${steps.length + 1}: Search range [${left}, ${right}], mid = ${mid}, value = ${array[mid]}.`
+      );
       await new Promise(resolve => setTimeout(resolve, 800));
       
       if (array[mid] === target) {
+        steps.push(`Step ${steps.length + 1}: Match found at index ${mid}.`);
+        setSearchSteps(steps);
         setResult({ found: true, index: mid });
         return;
       } else if (array[mid] < target) {
+        steps.push(
+          `Step ${steps.length + 1}: ${array[mid]} < ${target}, move to right half (${mid + 1} to ${right}).`
+        );
         left = mid + 1;
       } else {
+        steps.push(
+          `Step ${steps.length + 1}: ${array[mid]} > ${target}, move to left half (${left} to ${mid - 1}).`
+        );
         right = mid - 1;
       }
     }
     
+    steps.push(`Step ${steps.length + 1}: Target ${target} was not found after the search range became empty.`);
+    setSearchSteps(steps);
     setResult({ found: false, index: -1 });
   };
 
   const resetSearch = () => {
     setCurrentIndex(-1);
     setResult(null);
+    setSearchSteps([]);
   };
 
   const generateNewArray = () => {
@@ -135,22 +185,41 @@ function SearchingVisualizer() {
       </div>
 
       <div className="visualization-area">
-        <div className="array-container">
-          {array.map((value, index) => (
-            <div
-              key={index}
-              className={`array-element ${
-                index === currentIndex ? 'searching' : ''
-              } ${
-                result?.found && index === result.index ? 'found' : ''
-              } ${
-                result?.found === false && index === currentIndex ? 'not-found' : ''
-              }`}
-            >
-              <div className="element-value">{value}</div>
-              <div className="element-index">{index}</div>
-            </div>
-          ))}
+        <div className="search-visual-panel glass">
+          <div className="array-container">
+            {array.map((value, index) => (
+              <div
+                key={index}
+                className={`array-element ${
+                  index === currentIndex ? 'searching' : ''
+                } ${
+                  result?.found && index === result.index ? 'found' : ''
+                } ${
+                  result?.found === false && index === currentIndex ? 'not-found' : ''
+                }`}
+              >
+                <div className="element-value">{value}</div>
+                <div className="element-index">{index}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="search-steps-panel glass">
+          <h3>Search Steps</h3>
+          <div className="search-steps-list">
+            {searchSteps.length > 0 ? (
+              searchSteps.map((step, index) => (
+                <div key={index} className="search-step-item">
+                  {step}
+                </div>
+              ))
+            ) : (
+              <div className="search-steps-empty">
+                Run a search to see step-by-step history here.
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -170,6 +239,13 @@ function SearchingVisualizer() {
           </p>
         </div>
       )}
+
+      <div className="algorithm-panel glass">
+        <h3>{algorithmDetails[selectedAlgorithm].title}</h3>
+        <pre className="algorithm-code">
+          <code>{algorithmDetails[selectedAlgorithm].code}</code>
+        </pre>
+      </div>
 
       <div className="info-panel glass">
         <div className="algorithm-explanation">

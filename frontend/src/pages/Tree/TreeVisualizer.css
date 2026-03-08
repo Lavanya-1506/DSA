@@ -28,15 +28,44 @@
   flex-wrap: wrap;
 }
 
+.btn.danger-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn.danger-btn:hover {
+  background-color: #c0392b;
+}
 .visualization-area {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 15px;
   padding: 3rem 2rem;
   margin-bottom: 2rem;
   min-height: 500px;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 2rem;
   overflow-x: auto;
+}
+
+.result-panel {
+  padding: 1.5rem;
+  margin-bottom: 0;
+  border-radius: 15px;
+  max-width: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+.result-panel h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #eef1ff;
+  font-size: 1.35rem;
+  text-align: center;
+  letter-spacing: 0.5px;
 }
 
 .tree-container {
@@ -61,7 +90,7 @@
   justify-content: center;
   color: white;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
   transition: all 0.3s ease;
   position: relative;
@@ -118,17 +147,32 @@
   width: 40px;
 }
 
-.result-panel {
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 15px;
-}
-
 .traversal-result {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
   margin-top: 1rem;
+  max-width: 100%;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.traversal-step {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.75rem 1.25rem;
+  border-radius: 24px;
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+  min-width: 200px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.traversal-step:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .traversal-step {
@@ -136,12 +180,21 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 
 .info-panel {
   padding: 1.5rem;
   color: white;
+}
+
+@media (max-width: 980px) {
+  .visualization-area {
+    grid-template-columns: 1fr;
+  }
+  .result-panel {
+    margin-top: 2rem;
+  }
 }
 
 .tree-info {
@@ -173,7 +226,7 @@
 }
 
 .property-value {
-  color: #4CAF50;
+  color:#4CAF50;
   font-weight: 600;
 }
 
@@ -198,7 +251,7 @@
 .traversal-type h5 {
   margin-bottom: 0.5rem;
   font-size: 1rem;
-  color: #667eea;
+  color: #2a4be0;
 }
 
 .traversal-type p {

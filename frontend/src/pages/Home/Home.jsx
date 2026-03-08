@@ -67,7 +67,10 @@ function Home() {
             <Link to="/sorting" className="btn primary-btn">
               🚀 Start Learning
             </Link>
-            <button className="btn secondary-btn">
+            <button
+              className="btn secondary-btn"
+              onClick={() => window.location.href = '/challenges'}
+            >
               📚 View Challenges
             </button>
           </div>

@@ -124,6 +124,151 @@ function StackQueueVisualizer() {
           </ul>
         </div>
       </div>
+
+      <div className="info-section">
+        {structure === 'stack' ? (
+          <div className="info-panel glass">
+            <h3>📚 Stack Information</h3>
+            <div className="info-grid">
+              <div className="info-card">
+                <h4>Definition</h4>
+                <p>A Linear Data Structure that follows the LIFO (Last In First Out) principle. The last element added is the first one to be removed.</p>
+              </div>
+              <div className="info-card">
+                <h4>Push Operation</h4>
+                <div className="complexity-box">
+                  <span className="complexity-label">Time:</span>
+                  <span className="complexity-value">O(1)</span>
+                </div>
+                <p className="complexity-desc">Constant time insertion at the top</p>
+              </div>
+              <div className="info-card">
+                <h4>Pop Operation</h4>
+                <div className="complexity-box">
+                  <span className="complexity-label">Time:</span>
+                  <span className="complexity-value">O(1)</span>
+                </div>
+                <p className="complexity-desc">Constant time removal from the top</p>
+              </div>
+              <div className="info-card">
+                <h4>Space Complexity</h4>
+                <div className="complexity-box">
+                  <span className="complexity-label">Space:</span>
+                  <span className="complexity-value">O(n)</span>
+                </div>
+                <p className="complexity-desc">Linear space for n elements</p>
+              </div>
+              <div className="info-card full-width">
+                <h4>Common Use Cases</h4>
+                <ul className="use-cases">
+                  <li>Function call stack (recursion)</li>
+                  <li>Undo/Redo functionality</li>
+                  <li>Browser history (back button)</li>
+                  <li>Expression evaluation</li>
+                  <li>DFS (Depth-First Search)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="info-panel glass">
+            <h3>🎯 Queue Information</h3>
+            <div className="info-grid">
+              <div className="info-card">
+                <h4>Definition</h4>
+                <p>A Linear Data Structure that follows the FIFO (First In First Out) principle. The first element added is the first one to be removed.</p>
+              </div>
+              <div className="info-card">
+                <h4>Enqueue Operation</h4>
+                <div className="complexity-box">
+                  <span className="complexity-label">Time:</span>
+                  <span className="complexity-value">O(1)</span>
+                </div>
+                <p className="complexity-desc">Constant time insertion at rear</p>
+              </div>
+              <div className="info-card">
+                <h4>Dequeue Operation</h4>
+                <div className="complexity-box">
+                  <span className="complexity-label">Time:</span>
+                  <span className="complexity-value">O(1)</span>
+                </div>
+                <p className="complexity-desc">Constant time removal from front</p>
+              </div>
+              <div className="info-card">
+                <h4>Space Complexity</h4>
+                <div className="complexity-box">
+                  <span className="complexity-label">Space:</span>
+                  <span className="complexity-value">O(n)</span>
+                </div>
+                <p className="complexity-desc">Linear space for n elements</p>
+              </div>
+              <div className="info-card full-width">
+                <h4>Common Use Cases</h4>
+                <ul className="use-cases">
+                  <li>Task scheduling (CPU scheduling)</li>
+                  <li>Breadth-First Search (BFS)</li>
+                  <li>Print queue management</li>
+                  <li>Message queues (async processing)</li>
+                  <li>Customer service lines</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="algorithm-panel glass">
+          <h3>{structure === 'stack' ? 'Stack Algorithms' : 'Queue Algorithms'}</h3>
+          <div className="algorithm-grid">
+            {structure === 'stack' ? (
+              <>
+                <div className="algorithm-card">
+                  <h4>Push</h4>
+                  <pre className="algorithm-code">
+                    <code>{`PUSH(stack, x):
+  stack[top + 1] = x
+  top = top + 1`}</code>
+                  </pre>
+                </div>
+                <div className="algorithm-card">
+                  <h4>Pop</h4>
+                  <pre className="algorithm-code">
+                    <code>{`POP(stack):
+  if top == -1:
+    return "Underflow"
+  x = stack[top]
+  top = top - 1
+  return x`}</code>
+                  </pre>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="algorithm-card">
+                  <h4>Enqueue</h4>
+                  <pre className="algorithm-code">
+                    <code>{`ENQUEUE(queue, x):
+  if rear == n - 1:
+    return "Overflow"
+  rear = rear + 1
+  queue[rear] = x`}</code>
+                  </pre>
+                </div>
+                <div className="algorithm-card">
+                  <h4>Dequeue</h4>
+                  <pre className="algorithm-code">
+                    <code>{`DEQUEUE(queue):
+  if front > rear:
+    return "Underflow"
+  x = queue[front]
+  front = front + 1
+  return x`}</code>
+                  </pre>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
