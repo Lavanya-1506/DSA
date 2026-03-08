@@ -10,12 +10,12 @@ function Footer() {
           Made with <span style={{color: '#ff6b6b'}}>❤</span> for learning and practice.
         </span>
         <a
-          href="https://github.com/"
+          href="https://github.com/Lavanya-1506/DSA"
           target="_blank"
           rel="noopener noreferrer"
           className="footer-link"
         >
-          GitHub
+          GitHub-Lavanya Vaidya
         </a>
       </div>
     </footer>

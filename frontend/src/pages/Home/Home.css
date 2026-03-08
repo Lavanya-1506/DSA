@@ -164,8 +164,13 @@
 
 .stat-label {
   font-size: 1.1rem;
-  color: #ffff;
+  color: #ffffff;
   font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.stats-grid .stat-card .stat-label {
+  color: #ffffff;
 }
 
 /* Features Section */

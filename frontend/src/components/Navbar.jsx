@@ -27,7 +27,7 @@ function Navbar() {
       <div className="nav-container">
         <Link to="/" className="nav-logo">
           <div className="logo-placeholder">🧮</div>
-          <span>DSA Stimulator</span>
+          <span className="nav-logo-text">DSA Insight</span>
         </Link>
         
         <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
