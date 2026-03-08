@@ -1,11 +1,11 @@
-**DSA Insight – Interactive Data Structures & Algorithms Learning Platform
-**
+**DSA Insight – Interactive Data Structures & Algorithms Learning Platform**
+
 DSA Insight is a web-based learning platform developed during the hackathon to help students understand Data Structures and Algorithms (DSA) in a more interactive and visual way. Many learners find DSA difficult because they cannot see how algorithms work internally. Our platform solves this problem by providing step-by-step visualizations, practice challenges, and a competitive leaderboard system.
 
 The platform allows users to explore and understand different data structures and algorithms through real-time visual simulations, making complex concepts easier to grasp.
 
-**Key Features
-**1. User Authentication
+**Key Features**
+1. User Authentication
 
 The platform includes a secure login and registration system that allows users to create accounts and access the learning modules. Authentication also helps maintain user scores and leaderboard rankings.
 
@@ -43,13 +43,12 @@ Each algorithm module includes basic explanations and algorithm information, hel
 
 Algorithms are broken down into individual execution steps, allowing users to observe how the data structure changes during each step of the algorithm.
 
-**Objective of the Project
-**
+**Objective of the Project**
 The objective of DSA Insight is to make learning Data Structures and Algorithms more engaging, interactive, and easier to understand. By combining visualization, practice challenges, and a competitive leaderboard, the platform helps learners build stronger algorithmic thinking and problem-solving skills.
 
 **Tech Stack used in this Project**
-**Backend
-**Runtime: Node.js (using ES modules)
+**Backend**
+Runtime: Node.js (using ES modules)
 Framework: Express.js (for building the REST API)
 Database: MongoDB (with Mongoose as the ODM for data modeling)
 Authentication: JSON Web Tokens (jsonwebtoken) with bcryptjs for password hashing
@@ -60,8 +59,8 @@ HTTP requests (node-fetch)
 Development Tools:
 Nodemon (for auto-restarting during development)
 
-**Frontend
-**Framework: React 19.1.1 (with React DOM for rendering)
+**Frontend**
+Framework: React 19.1.1 (with React DOM for rendering)
 Build Tool: Vite (using rolldown-vite for bundling)
 Styling: Tailwind CSS (integrated via @tailwindcss/vite plugin)
 Routing: React Router DOM
