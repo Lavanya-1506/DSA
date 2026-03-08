@@ -48,22 +48,22 @@ The objective of DSA Insight is to make learning Data Structures and Algorithms 
 
 **Tech Stack used in this Project**
 **Backend**
-Runtime: Node.js (using ES modules)
-Framework: Express.js (for building the REST API)
-Database: MongoDB (with Mongoose as the ODM for data modeling)
-Authentication: JSON Web Tokens (jsonwebtoken) with bcryptjs for password hashing
+-Runtime: Node.js (using ES modules)
+-Framework: Express.js (for building the REST API)
+-Database: MongoDB (with Mongoose as the ODM for data modeling)
+-Authentication: JSON Web Tokens (jsonwebtoken) with bcryptjs for password hashing
 Other Libraries:
-CORS handling (cors)
-Environment variables (dotenv)
-HTTP requests (node-fetch)
-Development Tools:
-Nodemon (for auto-restarting during development)
+-CORS handling (cors)
+-Environment variables (dotenv)
+-HTTP requests (node-fetch)
+-Development Tools:
+-Nodemon (for auto-restarting during development)
 
 **Frontend**
-Framework: React 19.1.1 (with React DOM for rendering)
-Build Tool: Vite (using rolldown-vite for bundling)
-Styling: Tailwind CSS (integrated via @tailwindcss/vite plugin)
-Routing: React Router DOM
-Development Tools:
-ESLint (for code linting, with React-specific plugins)
-TypeScript types (@types/react and @types/react-dom, though the codebase uses .jsx files)
+-Framework: React 19.1.1 (with React DOM for rendering)
+-Build Tool: Vite (using rolldown-vite for bundling)
+-Styling: Tailwind CSS (integrated via @tailwindcss/vite plugin)
+-Routing: React Router DOM
+-Development Tools:
+-ESLint (for code linting, with React-specific plugins)
+-TypeScript types (@types/react and @types/react-dom, though the codebase uses .jsx files)
