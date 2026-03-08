@@ -47,7 +47,9 @@ Algorithms are broken down into individual execution steps, allowing users to ob
 The objective of DSA Insight is to make learning Data Structures and Algorithms more engaging, interactive, and easier to understand. By combining visualization, practice challenges, and a competitive leaderboard, the platform helps learners build stronger algorithmic thinking and problem-solving skills.
 
 **Tech Stack used in this Project**
+
 **Backend**
+
 -Runtime: Node.js (using ES modules)
 
 -Framework: Express.js (for building the REST API)
@@ -68,11 +70,20 @@ Other Libraries:
 
 -Nodemon (for auto-restarting during development)
 
+
 **Frontend**
+
 -Framework: React 19.1.1 (with React DOM for rendering)
+
 -Build Tool: Vite (using rolldown-vite for bundling)
+
 -Styling: Tailwind CSS (integrated via @tailwindcss/vite plugin)
+
 -Routing: React Router DOM
+
 -Development Tools:
+
 -ESLint (for code linting, with React-specific plugins)
+
 -TypeScript types (@types/react and @types/react-dom, though the codebase uses .jsx files)
+
