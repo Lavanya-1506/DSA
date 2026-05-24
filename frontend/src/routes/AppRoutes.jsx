@@ -7,6 +7,7 @@ import ProfilePage from '../pages/Auth/ProfilePage';
 import ChallengesPage from '../pages/Challenges/ChallengesPage';
 import ChallengeDetail from '../pages/Challenges/ChallengeDetail';
 import LeaderboardPage from '../pages/Challenges/LeaderboardPage';
+import CompanyQuestions from '../pages/Challenges/CompanyQuestions';
 import SortingVisualizer from '../pages/Sorting/SortingVisualizer';
 import SearchingVisualizer from '../pages/Searching/SearchingVisualizer';
 import TreeVisualizer from '../pages/Tree/TreeVisualizer';
@@ -24,6 +25,7 @@ function AppRoutes() {
       <Route path="/challenges" element={<ChallengesPage />} />
       <Route path="/challenges/:id" element={<ChallengeDetail />} />
       <Route path="/leaderboard" element={<LeaderboardPage />} />
+      <Route path="/company/:company" element={<CompanyQuestions />} />
       <Route path="/sorting" element={<SortingVisualizer />} />
       <Route path="/searching" element={<SearchingVisualizer />} />
       <Route path="/trees" element={<TreeVisualizer />} />

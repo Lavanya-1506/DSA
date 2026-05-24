@@ -125,6 +125,7 @@ export const createChallenge = async (req, res) => {
       spaceComplexity,
       testCases,
       tags,
+      companies,
     } = req.body;
 
     // Validation
@@ -150,6 +151,7 @@ export const createChallenge = async (req, res) => {
       spaceComplexity,
       testCases,
       tags,
+      companies,
       createdBy: req.user.id,
     });
 
@@ -263,6 +265,29 @@ export const getChallengesByCategory = async (req, res) => {
     const { category } = req.params;
 
     const challenges = await Challenge.find({ category, isPublished: true })
+      .select('-solutionCode -testCases')
+      .populate('createdBy', 'firstName lastName')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: challenges.length,
+      challenges,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Get challenges by company
+export const getChallengesByCompany = async (req, res) => {
+  try {
+    const { company } = req.params;
+
+    const challenges = await Challenge.find({ companies: company, isPublished: true })
       .select('-solutionCode -testCases')
       .populate('createdBy', 'firstName lastName')
       .sort({ createdAt: -1 });

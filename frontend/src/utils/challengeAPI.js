@@ -46,6 +46,10 @@ export const challengeAPI = {
   getChallengesByCategory: (category) =>
     apiCall(`/challenges/category/${category}`, { method: 'GET' }),
 
+  // Get challenges by company
+  getChallengesByCompany: (company) =>
+    apiCall(`/challenges/company/${encodeURIComponent(company)}`, { method: 'GET' }),
+
   // Create challenge (admin only)
   createChallenge: (challengeData) =>
     apiCall('/challenges', {

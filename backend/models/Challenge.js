@@ -88,6 +88,7 @@ const challengeSchema = new mongoose.Schema(
       default: true,
     },
     tags: [String],
+    companies: [String],
     createdAt: {
       type: Date,
       default: Date.now,

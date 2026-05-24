@@ -7,6 +7,7 @@ import {
   deleteChallenge,
   getChallengesByDifficulty,
   getChallengesByCategory,
+  getChallengesByCompany,
   getUserChallengeProgress,
 } from '../controllers/challengeController.js';
 import {
@@ -27,6 +28,7 @@ const router = express.Router();
 router.get('/challenges', getAllChallenges);
 router.get('/challenges/difficulty/:difficulty', getChallengesByDifficulty);
 router.get('/challenges/category/:category', getChallengesByCategory);
+router.get('/challenges/company/:company', getChallengesByCompany);
 router.get('/challenges/:id', getChallenge);
 router.post('/challenges', protect, authorize('admin'), createChallenge);
 router.put('/challenges/:id', protect, authorize('admin'), updateChallenge);
